@@ -1,7 +1,7 @@
 from datetime import datetime
 from unittest import TestCase
 
-from rwsch.models import ActivityGroup, ScheduleService
+from rwsch.models import SchedulingStrategy, SchedulingService
 
 
 class TestItem:
@@ -10,7 +10,7 @@ class TestItem:
         self.rating = rating
 
 
-class TestStrategy(ActivityGroup):
+class TestStrategy(SchedulingStrategy):
     def get_schedule(self, items):
         return []
 
@@ -35,8 +35,8 @@ class ServiceTestCase(TestCase):
 
     def test_activity_group_determination(self):
         strategies_list = [TestStrategy]
-        service = ScheduleService(strategies_list)
+        service = SchedulingService(strategies_list)
 
-        strategy = service.get_activity_group(self.items)
+        strategy = service.get_strategy(self.items)
 
         self.assertIsInstance(strategy, TestStrategy)

@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 
 from examples.serp import strategies
-from rwsch.models import ScheduleService
+from rwsch.models import SchedulingService
 
 
 class TestItem:
@@ -22,7 +22,7 @@ class StrategiesTestCase(TestCase):
             strategies.LowLowActivity
         ]
 
-        service = ScheduleService(strategy_list)
+        service = SchedulingService(strategy_list)
 
         cls.service = service
 
@@ -36,7 +36,7 @@ class StrategiesTestCase(TestCase):
             ) for i in range(0, 24)
         ]
 
-        group = self.service.get_activity_group(items)
+        group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.HighActivity)
 
         sch = self.service.get_schedule(items)
@@ -52,7 +52,7 @@ class StrategiesTestCase(TestCase):
             ) for i in range(0, 12)
         ]
 
-        group = self.service.get_activity_group(items)
+        group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.MediumActivity)
 
         sch = self.service.get_schedule(items)
@@ -67,7 +67,7 @@ class StrategiesTestCase(TestCase):
             TestItem(datetime.strptime('2017-01-01', "%Y-%m-%d").date()) for _ in range(0, 6)
         ]
 
-        group = self.service.get_activity_group(items)
+        group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.PastActivity)
 
         sch = self.service.get_schedule(items)
@@ -86,7 +86,7 @@ class StrategiesTestCase(TestCase):
             TestItem(datetime.strptime('2016-01-01', "%Y-%m-%d").date()) for _ in range(0, 3)
         ]
 
-        group = self.service.get_activity_group(items)
+        group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.HighLowActivity)
 
         sch = self.service.get_schedule(items)
@@ -105,7 +105,7 @@ class StrategiesTestCase(TestCase):
             TestItem(datetime.strptime('2016-01-01', "%Y-%m-%d").date()) for _ in range(0, 1)
         ]
 
-        group = self.service.get_activity_group(items)
+        group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.LowLowActivity)
 
         sch = self.service.get_schedule(items)

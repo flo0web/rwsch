@@ -1,12 +1,17 @@
 from random import randint
 
-from rwsch.models import ActivityGroup, Period
+from rwsch.models import SchedulingStrategy, Period
 
 
-class HighActivity(ActivityGroup):
+class HighActivity(SchedulingStrategy):
     """Группа высокой активности"""
 
     def get_schedule(self, items):
+        """
+        Первый 2 месяца ср негатив в мес за год + 0.3 * ср позитив в мес за год
+        Дальше увеличивается на 30% ежемесячно
+        """
+
         period = Period.from_delta(0, 365)
 
         pos_items = list(i for i in items if (period.satisfied(i) and i.rating > 3))
@@ -41,10 +46,15 @@ class HighActivity(ActivityGroup):
         return avg >= 2
 
 
-class MediumActivity(ActivityGroup):
+class MediumActivity(SchedulingStrategy):
     """Группа средней активности"""
 
     def get_schedule(self, items):
+        """
+        Первый месяц ср негатив в мес за год + 0.3 * ср позитив в мес за год
+        Дальше увеличивается на 1 отзыв в месяц
+        """
+
         period = Period.from_delta(0, 365)
 
         pos_items = list(i for i in items if (period.satisfied(i) and i.rating > 3))
@@ -80,7 +90,7 @@ class MediumActivity(ActivityGroup):
         return avg >= 1
 
 
-class PastActivity(ActivityGroup):
+class PastActivity(SchedulingStrategy):
     """Группа с активностью не в текущем году"""
 
     def get_schedule(self, items):
@@ -108,10 +118,14 @@ class PastActivity(ActivityGroup):
         return False
 
 
-class HighLowActivity(ActivityGroup):
+class HighLowActivity(SchedulingStrategy):
     """Группа с низкой активностью 3-6 отзывов в год"""
 
     def get_schedule(self, items):
+        """
+        2 отзыва в год, в первом и во втором полугодии случайным образом
+        """
+
         schedule = [0 for _ in range(0, 12)]
 
         rnd_month = randint(0, 5)
@@ -138,10 +152,14 @@ class HighLowActivity(ActivityGroup):
         return avg >= 3
 
 
-class LowLowActivity(ActivityGroup):
+class LowLowActivity(SchedulingStrategy):
     """Группа с низкой активностью 1-2 отзыва в год"""
 
     def get_schedule(self, items):
+        """
+        1 отзыв в год, в первом и во втором полугодии случайным образом
+        """
+
         schedule = [0 for _ in range(0, 12)]
 
         rnd_month = randint(0, 11)

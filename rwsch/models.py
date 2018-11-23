@@ -23,7 +23,7 @@ class Period:
         )
 
 
-class ActivityGroup(ABC):
+class SchedulingStrategy(ABC):
     @abstractmethod
     def get_schedule(self, items):
         pass
@@ -34,11 +34,11 @@ class ActivityGroup(ABC):
         pass
 
 
-class ScheduleService:
-    def __init__(self, strategy_list: List[Type[ActivityGroup]]):
+class SchedulingService:
+    def __init__(self, strategy_list: List[Type[SchedulingStrategy]]):
         self._strategy_list = strategy_list
 
-    def get_activity_group(self, items):
+    def get_strategy(self, items):
         strategy = None
         for strategy_cls in self._strategy_list:
             if strategy_cls.satisfies(items):
@@ -49,6 +49,6 @@ class ScheduleService:
             return strategy
 
     def get_schedule(self, items):
-        strategy = self.get_activity_group(items)
+        strategy = self.get_strategy(items)
 
         return strategy.get_schedule(items)
