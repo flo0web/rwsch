@@ -60,7 +60,7 @@ class StrategiesTestCase(TestCase):
 
     def test_past_activity_group(self):
         items = [
-            TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 1)
+            TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 4)
         ]
 
         items += [
@@ -71,7 +71,8 @@ class StrategiesTestCase(TestCase):
         self.assertIsInstance(group, strategies.PastActivity)
 
         sch = self.service.get_schedule(items)
-        self.assertEqual(sch, [])
+
+        self.assertEqual(sch, [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
 
     def test_hi_lo_activity_group(self):
         items = [

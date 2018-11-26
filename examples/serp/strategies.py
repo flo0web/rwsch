@@ -1,3 +1,4 @@
+from collections import deque
 from random import randint
 
 from rwsch.models import SchedulingStrategy, Period
@@ -94,7 +95,42 @@ class PastActivity(SchedulingStrategy):
     """Группа с активностью не в текущем году"""
 
     def get_schedule(self, items):
-        return []
+        periods = [
+            Period.from_delta(0, 365),
+            Period.from_delta(365, 2 * 365),
+            Period.from_delta(2 * 365, 3 * 365),
+        ]
+
+        hi_activity_avg_list = []
+        lo_activity_avg_list = []
+
+        for period in periods:
+            period_items = [i for i in items if period.satisfied(i)]
+
+            if len(period_items) == 0:
+                continue
+
+            avg = len(period_items) / 12
+            if avg >= 0.5:
+                hi_activity_avg_list.append(avg)
+            else:
+                lo_activity_avg_list.append(avg)
+
+        hi_activity_avg = sum(hi_activity_avg_list) / len(hi_activity_avg_list)
+        lo_activity_avg = sum(lo_activity_avg_list) / len(lo_activity_avg_list)
+
+        year_plan = round(lo_activity_avg * 1.5 * 12)
+        distribution = deque([i for i in range(0, 120, int(round(12 / year_plan, 1) * 10))])
+
+        schedule = []
+        for i in range(0, 120, 10):
+            if len(distribution) and i >= distribution[0]:
+                schedule.append(1)
+                distribution.popleft()
+            else:
+                schedule.append(0)
+
+        return schedule
 
     @classmethod
     def satisfies(cls, items):
