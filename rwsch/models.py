@@ -47,8 +47,3 @@ class SchedulingService:
 
         if strategy is not None:
             return strategy
-
-    def get_schedule(self, items):
-        strategy = self.get_strategy(items)
-
-        return strategy.get_schedule(items)
