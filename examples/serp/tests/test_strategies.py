@@ -39,8 +39,8 @@ class StrategiesTestCase(TestCase):
         group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.HighActivity)
 
-        sch = self.service.get_schedule(items)
-        self.assertEqual(sch, [1, 1, 1, 2, 2, 3, 4, 5, 6, 8, 10, 13])
+        sch = group.get_schedule(items)
+        self.assertEqual(12, len(sch))
 
     def test_medium_activity_group(self):
         ratings = [2, 4, 1, 2, 1, 3, 4, 1, 1, 1, 5, 2]
@@ -55,8 +55,8 @@ class StrategiesTestCase(TestCase):
         group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.MediumActivity)
 
-        sch = self.service.get_schedule(items)
-        self.assertEqual(sch, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+        sch = group.get_schedule(items)
+        self.assertEqual(12, len(sch))
 
     def test_past_activity_group(self):
         items = [
@@ -70,7 +70,7 @@ class StrategiesTestCase(TestCase):
         group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.PastActivity)
 
-        sch = self.service.get_schedule(items)
+        sch = group.get_schedule(items)
 
         self.assertEqual(sch, [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
 
@@ -106,7 +106,7 @@ class StrategiesTestCase(TestCase):
         group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.HighLowActivity)
 
-        sch = self.service.get_schedule(items)
+        sch = group.get_schedule(items)
         self.assertEqual(sum(sch), 2)
 
     def test_lo_lo_activity_group(self):
@@ -125,5 +125,5 @@ class StrategiesTestCase(TestCase):
         group = self.service.get_strategy(items)
         self.assertIsInstance(group, strategies.LowLowActivity)
 
-        sch = self.service.get_schedule(items)
+        sch = group.get_schedule(items)
         self.assertEqual(sum(sch), 1)

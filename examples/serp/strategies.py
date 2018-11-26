@@ -1,7 +1,14 @@
+import random
 from collections import deque
+from functools import reduce
 from random import randint
 
 from rwsch.models import SchedulingStrategy, Period
+
+DISTRIBUTION_SCHEMES = [
+    ['growth', 'growth', 'rollback', 'growth'],
+    ['growth', 'repeat', 'growth', 'rollback']
+]
 
 
 class HighActivity(SchedulingStrategy):
@@ -21,12 +28,19 @@ class HighActivity(SchedulingStrategy):
         avg_pos = len(pos_items) / 12
         avg_neg = len(neg_items) / 12
 
+        distribution = reduce((lambda x, y: x + random.choice(DISTRIBUTION_SCHEMES)), range(0, 3), [])
+
         schedule = []
         for m in range(0, 12):
-            if m <= 2:
+            if m < 2:
                 limit = avg_neg + (0.3 * avg_pos)
             else:
-                limit = schedule[-1] * 1.3
+                if distribution[m] == 'growth':
+                    limit = schedule[-1] * 1.3
+                elif distribution[m] == 'rollback':
+                    limit = schedule[-1] * (1 - random.choice([0.2, 0.3, 0.4]))
+                else:
+                    limit = schedule[-1]
 
             schedule.append(limit)
 
@@ -64,12 +78,19 @@ class MediumActivity(SchedulingStrategy):
         avg_pos = len(pos_items) / 12
         avg_neg = len(neg_items) / 12
 
+        distribution = reduce((lambda x, y: x + random.choice(DISTRIBUTION_SCHEMES)), range(0, 3), [])
+
         schedule = []
         for m in range(0, 12):
             if m == 0:
                 limit = avg_neg + (0.3 * avg_pos)
             else:
-                limit = schedule[-1] + 1
+                if distribution[m] == 'growth':
+                    limit = schedule[-1] + 1
+                elif distribution[m] == 'rollback':
+                    limit = schedule[-2]
+                else:
+                    limit = schedule[-1]
 
             schedule.append(limit)
 
