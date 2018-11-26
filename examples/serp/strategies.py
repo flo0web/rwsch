@@ -117,7 +117,13 @@ class PastActivity(SchedulingStrategy):
                 lo_activity_avg_list.append(avg)
 
         hi_activity_avg = sum(hi_activity_avg_list) / len(hi_activity_avg_list)
-        lo_activity_avg = sum(lo_activity_avg_list) / len(lo_activity_avg_list)
+
+        # В этой стратегии возможна ситуация, когда в исследуемом году нет отзывов
+        # Так как на ноль делить нельзя, сделаем минимальную активность, как для одного отзыва в году
+        if len(lo_activity_avg_list) > 0:
+            lo_activity_avg = sum(lo_activity_avg_list) / len(lo_activity_avg_list)
+        else:
+            lo_activity_avg = 0.083
 
         year_plan = round(lo_activity_avg * 1.5 * 12)
         distribution = deque([i for i in range(0, 120, int(round(12 / year_plan, 1) * 10))])

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rwsch",
-    version="0.1",
+    version="0.1.1",
     author="Alexandr A.",
     author_email="flo0.webmaster@gmail.com",
     description="Package for scheduling publications based on historical data",

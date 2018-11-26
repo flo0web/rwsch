@@ -74,6 +74,22 @@ class StrategiesTestCase(TestCase):
 
         self.assertEqual(sch, [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
 
+    def test_past_activity_last_year_empty(self):
+        """
+        В этой стратегии возможна ситуация, когда в исследуемом году нет отзывов
+        Так как на ноль делить нельзя, сделаем минимальную активность, как для одного отзыва в году
+        """
+
+        items = [
+            TestItem(datetime.strptime('2017-01-01', "%Y-%m-%d").date()) for _ in range(0, 6)
+        ]
+
+        group = self.service.get_strategy(items)
+        self.assertIsInstance(group, strategies.PastActivity)
+
+        sch = group.get_schedule(items)
+        self.assertIn(sum(sch), [1, 2])
+
     def test_hi_lo_activity_group(self):
         items = [
             TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 3)
