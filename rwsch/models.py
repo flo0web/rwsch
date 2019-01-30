@@ -132,9 +132,9 @@ class SchedulingStrategy(ABC):
             forecast.append({
                 'period_number': period_num,
                 'items_from_sch': items_scheduled,
-                'rating_from_sch': 5,
+                'rating_from_sch': 5 if items_scheduled > 0 else '-',
                 'items_from_history': len(items_projected),
-                'rating_from_history': sum(items_projected) / len(items_projected),
+                'rating_from_history': sum(items_projected) / len(items_projected) if len(items_projected) > 0 else '-',
                 'items_total': len(ratings),
                 'rating_avg': rating_current_month,
             })
