@@ -31,7 +31,7 @@ class StrategiesTestCase(TestCase):
 
         items = [
             TestItem(
-                date=datetime.strptime('2018-01-01', "%Y-%m-%d").date(),
+                date=datetime.strptime('2019-01-01', "%Y-%m-%d").date(),
                 rating=ratings[i],
             ) for i in range(0, 24)
         ]
@@ -47,7 +47,7 @@ class StrategiesTestCase(TestCase):
 
         items = [
             TestItem(
-                date=datetime.strptime('2018-01-01', "%Y-%m-%d").date(),
+                date=datetime.strptime('2019-01-01', "%Y-%m-%d").date(),
                 rating=ratings[i],
             ) for i in range(0, 12)
         ]
@@ -60,11 +60,11 @@ class StrategiesTestCase(TestCase):
 
     def test_past_activity_group(self):
         items = [
-            TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 4)
+            TestItem(datetime.strptime('2019-01-01', "%Y-%m-%d").date()) for _ in range(0, 4)
         ]
 
         items += [
-            TestItem(datetime.strptime('2017-01-01', "%Y-%m-%d").date()) for _ in range(0, 6)
+            TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 6)
         ]
 
         group = self.service.get_strategy(items)
@@ -81,7 +81,7 @@ class StrategiesTestCase(TestCase):
         """
 
         items = [
-            TestItem(datetime.strptime('2017-01-01', "%Y-%m-%d").date()) for _ in range(0, 6)
+            TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 6)
         ]
 
         group = self.service.get_strategy(items)
@@ -92,15 +92,15 @@ class StrategiesTestCase(TestCase):
 
     def test_hi_lo_activity_group(self):
         items = [
+            TestItem(datetime.strptime('2019-01-01', "%Y-%m-%d").date()) for _ in range(0, 3)
+        ]
+
+        items += [
             TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 3)
         ]
 
         items += [
             TestItem(datetime.strptime('2017-01-01', "%Y-%m-%d").date()) for _ in range(0, 3)
-        ]
-
-        items += [
-            TestItem(datetime.strptime('2016-01-01', "%Y-%m-%d").date()) for _ in range(0, 3)
         ]
 
         group = self.service.get_strategy(items)
@@ -111,15 +111,15 @@ class StrategiesTestCase(TestCase):
 
     def test_lo_lo_activity_group(self):
         items = [
+            TestItem(datetime.strptime('2019-01-01', "%Y-%m-%d").date()) for _ in range(0, 1)
+        ]
+
+        items += [
             TestItem(datetime.strptime('2018-01-01', "%Y-%m-%d").date()) for _ in range(0, 1)
         ]
 
         items += [
             TestItem(datetime.strptime('2017-01-01', "%Y-%m-%d").date()) for _ in range(0, 1)
-        ]
-
-        items += [
-            TestItem(datetime.strptime('2016-01-01', "%Y-%m-%d").date()) for _ in range(0, 1)
         ]
 
         group = self.service.get_strategy(items)

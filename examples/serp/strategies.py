@@ -23,9 +23,9 @@ class HighActivity(SchedulingStrategy):
         period = Period.from_delta(0, 365)
 
         pos_items = list(i for i in items if (period.satisfied(i) and i.rating > 3))
-        neg_items = list(i for i in items if (period.satisfied(i) and i.rating < 4))
-
         avg_pos = len(pos_items) / 12
+
+        neg_items = list(i for i in items if (period.satisfied(i) and i.rating < 4))
         avg_neg = len(neg_items) / 12
 
         distribution = reduce((lambda x, y: x + random.choice(DISTRIBUTION_SCHEMES)), range(0, 3), [])
@@ -73,9 +73,9 @@ class MediumActivity(SchedulingStrategy):
         period = Period.from_delta(0, 365)
 
         pos_items = list(i for i in items if (period.satisfied(i) and i.rating > 3))
-        neg_items = list(i for i in items if (period.satisfied(i) and i.rating < 4))
-
         avg_pos = len(pos_items) / 12
+
+        neg_items = list(i for i in items if (period.satisfied(i) and i.rating < 4))
         avg_neg = len(neg_items) / 12
 
         distribution = reduce((lambda x, y: x + random.choice(DISTRIBUTION_SCHEMES)), range(0, 3), [])
@@ -162,7 +162,8 @@ class PastActivity(SchedulingStrategy):
     @classmethod
     def satisfies(cls, items):
         """
-        Количество отзывов больше 3 в год (365) за последниие 3 года (1095 дней)
+        Количество отзывов больше 6 (1 отзыв раз в 2 месяца) в год за любой
+        из последних 2 годов, предшествующих текущему
         """
 
         periods = [
